@@ -1,15 +1,12 @@
-package com.kafka.producer;
+package com.kafka.producer.consumer;
 
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.util.logging.PlatformLogger;
 
 import java.util.Properties;
 
-import static com.sun.activation.registries.LogSupport.isLoggable;
-import static com.sun.activation.registries.LogSupport.log;
 
 public class Producer {
 
@@ -24,7 +21,7 @@ public class Producer {
 
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<String, String>(properties);
 
-        ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>("first_topic", "hello world");
+        ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>("first_topic",  "key", "hello world");
 
         kafkaProducer.send(producerRecord, new Callback() {
             public void onCompletion(RecordMetadata recordMetadata, Exception e) {
