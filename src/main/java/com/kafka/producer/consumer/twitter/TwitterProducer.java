@@ -24,28 +24,31 @@ import java.util.concurrent.TimeUnit;
 
 public class TwitterProducer {
 
-    private String consumerKey = "vC4bsWbRLKyRIiuubqulY6oTZ";
-    private String consumerSecret = "SjsFzeMU6XAZZWgFS9MjxDqZXG2rhHgAPQY4w7Y3VKkhYH3evt";
-    private String token = "1218470536482893824-C0lBoZSTFs9KyuoeAv77XOolSkUkl1";
-    private String secret = "6RSx33UhjSrRd3i0n1IbZYsEvi5cimHuFivkblc86e6Zf";
+    private final String consumerKey = "vC4bsWbRLKyRIiuubqulY6oTZ";
+    private final String consumerSecret = "SjsFzeMU6XAZZWgFS9MjxDqZXG2rhHgAPQY4w7Y3VKkhYH3evt";
+    private final String token = "1218470536482893824-C0lBoZSTFs9KyuoeAv77XOolSkUkl1";
+    private final String secret = "6RSx33UhjSrRd3i0n1IbZYsEvi5cimHuFivkblc86e6Zf";
+    private Logger logger = LoggerFactory.getLogger(TwitterProducer.class);
 
-    public TwitterProducer() {
-    }
+    public TwitterProducer() {}
 
     public static void main(String[] args) {
-        new TwitterProducer().run();
+        new TwitterProducer().processTweets();
     }
 
-    public void run() {
-        Logger logger = LoggerFactory.getLogger(TwitterProducer.class);
-
-        //setup Kafka Producer
+    public void processTweets() {
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<String, String>(getKafkaProperties());
 
         //setup Twitter client
         BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(1000);
         Client client = createTwitterClient(msgQueue);
         client.connect();
+
+        //ensure by application stop that all produced messages got send to kafka
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            client.stop();
+            kafkaProducer.close();
+        }));
 
         while (!client.isDone()) {
             String msg = null;
@@ -67,9 +70,6 @@ public class TwitterProducer {
                 });
             }
         }
-        kafkaProducer.flush();
-        kafkaProducer.close();
-
     }
 
     private Properties getKafkaProperties() {
