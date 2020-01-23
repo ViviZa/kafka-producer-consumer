@@ -1,26 +1,38 @@
-# KafkaProducer
+# Messaging System implemented with Kafka
 
-This project is producing and sending messages to a Kafka Broker.
+This project contains a producer and a consumer implementation connected to a Kafka Broker.
 
-## prerequisites:
-Apache Kafka installation
+The basic package contains a producer, sending a record to the Kafka Broker, and consumer, receiving that record as an implementation by example.
 
-## run the application:
+The twitter package contains: 
+### TwitterProducer
+- Obtains data from Tweets on Twitter containing a special term
+- Sends the filtered Tweets to a Kafka topic
 
-- start the zookeeper
+### TwitterConsumer
+- Consumes tweets from that topic
+- Deserializes tweets
+- Saves tweets id, creation date, consumed date and source in a database 
+
+## Prerequisites:
+- Apache Kafka installation
+- Twitter developer credentials
+- Sqlite installation 
+- Database named "twittertweets.db" with table "tweets" having columns: id_str, created_at, consumed_at, consumed_through
+
+## Run the application:
+
+- Start the zookeeper
 ```
     zookeeper-servestart.sh config/zookeeper.properties
 ```
-- start kafka server
+- Start kafka server
 ```
 start kakfa: kafka-server-start.sh config/server.properties
 ```
-- create the topic
+- Create the topic
 ```
 kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --create --partitions 3 --replication-factor 1
 ```
-- run the consumer
-```
-kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic first_topic
-```
-- run main method of application
+
+- Run main method of Main.java
