@@ -17,7 +17,9 @@ import java.util.Date;
 import java.util.Properties;
 
 public class TwitterConsumer implements Runnable {
-    
+
+    private DatabaseConnector databaseConnector = new DatabaseConnector();
+
     public void run() {
         final Logger logger = LoggerFactory.getLogger(TwitterConsumer.class);
         ObjectMapper mapper = new ObjectMapper();
@@ -42,10 +44,13 @@ public class TwitterConsumer implements Runnable {
                 Date now = new Date();
                 tweet.setConsumed_at(dateFormat.format(now));
                 //logger.info("Partition: " + record.partition(), ", Offset: " + record.offset());
+                writeTweetIntoDb(tweet);
             }
         }
-        //TODO: do something with the data
+    }
 
+    private void writeTweetIntoDb(Tweet tweet){
+        databaseConnector.insert(tweet.getId(), tweet.getCreated_at(), tweet.getConsumed_at(), "Kafka");
     }
 
     private Properties getProperties(){
