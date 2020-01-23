@@ -4,16 +4,16 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class Tweet {
-    private long id;
+    private String id_str;
     private String created_at;
     private String consumed_at;
 
-    public long getId() {
-        return id;
+    public String getId() {
+        return id_str;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setId(String id_str) {
+        this.id_str = id_str;
     }
 
     public String getCreated_at() {

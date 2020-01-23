@@ -22,21 +22,22 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 
-public class TwitterProducer {
+public class TwitterProducer implements Runnable{
 
-    private final String consumerKey = "";
-    private final String consumerSecret = "";
-    private final String token = "";
-    private final String secret = "";
+    private final String consumerKey;
+    private final String consumerSecret;
+    private final String token ;
+    private final String secret ;
     private Logger logger = LoggerFactory.getLogger(TwitterProducer.class);
 
-    public TwitterProducer() {}
-
-    public static void main(String[] args) {
-        new TwitterProducer().processTweets();
+    public TwitterProducer(String consumerKey, String token, String consumerSecret, String secret) {
+        this.consumerKey = consumerKey;
+        this.token = token;
+        this.consumerSecret = consumerSecret;
+        this.secret = secret;
     }
 
-    public void processTweets() {
+    public void run() {
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<String, String>(getKafkaProperties());
 
         //setup Twitter client
