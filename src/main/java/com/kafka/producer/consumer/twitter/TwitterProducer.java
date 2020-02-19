@@ -86,7 +86,7 @@ public class TwitterProducer implements Runnable{
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 
         //set term to listen to in twitter tweets
-        List<String> terms = Lists.newArrayList("bitcoin");
+        List<String> terms = Lists.newArrayList("Kafka");
         hosebirdEndpoint.trackTerms(terms);
 
         Authentication hosebirdAuth = new OAuth1(consumerKey, consumerSecret, token, secret);

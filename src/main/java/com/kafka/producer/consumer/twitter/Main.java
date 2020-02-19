@@ -3,7 +3,7 @@ package com.kafka.producer.consumer.twitter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Main {
+public class  Main {
 
     private static String secret = "";
     private static String consumerSecret = "";
@@ -15,7 +15,9 @@ public class Main {
         ExecutorService executorService = Executors.newFixedThreadPool(20);
         TwitterProducer producer = new TwitterProducer(consumerKey, token, consumerSecret, secret);
         executorService.execute(producer);
-        TwitterConsumer consumer = new TwitterConsumer();
+        TwitterConsumer consumer = new TwitterConsumer(1);
         executorService.execute(consumer);
+        TwitterConsumer consumer2 = new TwitterConsumer(2);
+        executorService.execute(consumer2);
     }
 }

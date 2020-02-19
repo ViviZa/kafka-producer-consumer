@@ -16,7 +16,6 @@ public class DatabaseConnector {
     public void insert(String id_str, String created_at, String consumed_at, String consumed_through) {
         String sql = "INSERT INTO tweet(id_str, created_at, consumed_at, consumed_through) VALUES(?,?,?,?)";
 
-        logger.info("prepare sql statement");
         try (Connection conn = this.connect();
              PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, id_str);

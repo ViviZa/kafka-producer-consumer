@@ -18,6 +18,12 @@ import java.util.Properties;
 
 public class TwitterConsumer implements Runnable {
 
+    private int id;
+
+    public TwitterConsumer(int id){
+        this.id = id;
+    }
+
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public void run() {
@@ -37,13 +43,13 @@ public class TwitterConsumer implements Runnable {
                 Tweet tweet = null;
                 try {
                     tweet = mapper.readValue(record.value(), Tweet.class);
-                    logger.info(tweet.getCreated_at() + "Date");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 Date now = new Date();
                 tweet.setConsumed_at(dateFormat.format(now));
-                //logger.info("Partition: " + record.partition(), ", Offset: " + record.offset());
+
+                logger.info("Consumer " + id + " " + record.value());
                 writeTweetIntoDb(tweet);
             }
         }
@@ -58,7 +64,7 @@ public class TwitterConsumer implements Runnable {
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "groupId");
+        properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "groupId" + id);
         //read from the beginning of the topic
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         return properties;
