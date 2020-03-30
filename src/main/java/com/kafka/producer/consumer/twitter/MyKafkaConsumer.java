@@ -16,23 +16,23 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 
-public class TwitterConsumer implements Runnable {
+public class MyKafkaConsumer implements Runnable {
 
     private int id;
 
-    public TwitterConsumer(int id){
+    public MyKafkaConsumer(int id) {
         this.id = id;
     }
 
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public void run() {
-        final Logger logger = LoggerFactory.getLogger(TwitterConsumer.class);
+        final Logger logger = LoggerFactory.getLogger(MyKafkaConsumer.class);
         ObjectMapper mapper = new ObjectMapper();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
 
         //create the consumer
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(getProperties());
+        KafkaConsumer consumer = new KafkaConsumer(getProperties());
         //subscribe to topic
         consumer.subscribe(Arrays.asList("twitter_tweets"));
 

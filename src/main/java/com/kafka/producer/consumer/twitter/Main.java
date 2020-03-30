@@ -13,9 +13,10 @@ public class  Main {
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newFixedThreadPool(20);
-        TwitterProducer producer = new TwitterProducer(consumerKey, token, consumerSecret, secret);
-        executorService.execute(producer);
-        TwitterConsumer consumer = new TwitterConsumer(1);
+        MyKafkaProducer myKafkaProducer = new MyKafkaProducer(consumerKey, token, consumerSecret, secret);
+        executorService.execute(myKafkaProducer);
+
+        MyKafkaConsumer consumer = new MyKafkaConsumer(1);
         executorService.execute(consumer);
         TwitterConsumer consumer2 = new TwitterConsumer(2);
         executorService.execute(consumer2);
