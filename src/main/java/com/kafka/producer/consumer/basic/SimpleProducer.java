@@ -8,12 +8,11 @@ import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 
-public class Producer {
+public class SimpleProducer implements Runnable{
 
 
-    public static void main(String[] args) {
-
-        final Logger logger = LoggerFactory.getLogger(Producer.class);
+    public void run() {
+        final Logger logger = LoggerFactory.getLogger(SimpleProducer.class);
         Properties properties = new Properties();
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -21,7 +20,7 @@ public class Producer {
 
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<String, String>(properties);
 
-        ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>("first_topic",  "key", "hello world");
+        ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>("twitter_tweets",  "key", "{\"created_at\":\"Wed Feb 19 10:35:01 +0000 2020\",\"id_str\":\"1010\"}");
 
         kafkaProducer.send(producerRecord, new Callback() {
             public void onCompletion(RecordMetadata recordMetadata, Exception e) {

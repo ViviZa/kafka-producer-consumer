@@ -18,7 +18,12 @@ public class  Main {
 
         MyKafkaConsumer consumer = new MyKafkaConsumer(1);
         executorService.execute(consumer);
-        TwitterConsumer consumer2 = new TwitterConsumer(2);
-        executorService.execute(consumer2);
+        //multiple consumer
+        /*TwitterConsumer consumer2 = new TwitterConsumer(2);
+        executorService.execute(consumer2);*/
+
+        // multiple producer
+        /*Producer producerWithSingleMessage = new Producer();
+        executorService.execute(producerWithSingleMessage);*/
     }
 }
